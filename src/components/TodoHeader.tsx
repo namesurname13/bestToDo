@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { useTranslation } from "react-i18next";
 
-const Header = styled.header`
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,6 +10,7 @@ const Header = styled.header`
 
 const Title = styled.h1`
   margin: 0;
+  font-size: 1.5rem;
   color: #333;
 `;
 
@@ -17,13 +18,26 @@ const LanguageSelector = styled.select`
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 1rem;
+  background-color: black;
   cursor: pointer;
+  font-size: 1.2rem;
+  width: 60px;
+  text-align: center;
+
+  &:hover {
+    border-color: #999;
+  }
 
   &:focus {
     outline: none;
-    border-color: #4caf50;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
   }
+`;
+
+const LanguageOption = styled.option`
+  font-size: 1.2rem;
+  text-align: center;
 `;
 
 export const TodoHeader: React.FC = () => {
@@ -37,8 +51,8 @@ export const TodoHeader: React.FC = () => {
     <Header>
       <Title>Todo List</Title>
       <LanguageSelector value={i18n.language} onChange={changeLanguage}>
-        <option value="ru">Русский</option>
-        <option value="en">English</option>
+        <LanguageOption value="ru">🇷🇺</LanguageOption>
+        <LanguageOption value="en">🇬🇧</LanguageOption>
       </LanguageSelector>
     </Header>
   );
