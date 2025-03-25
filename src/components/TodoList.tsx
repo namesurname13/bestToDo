@@ -150,14 +150,13 @@ export const TodoList: React.FC = () => {
   };
 
   /**
-   * Обновляет текст и заметки задачи
+   * Обновляет текст задачи
    * @param id - ID задачи для обновления
    * @param text - Новый текст задачи
-   * @param notes - Новые заметки к задаче
    */
-  const handleUpdateTodo = (id: string, text: string, notes: string) => {
+  const handleUpdateTodo = (id: string, text: string) => {
     setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, text, notes } : todo))
+      prev.map((todo) => (todo.id === id ? { ...todo, title: text } : todo))
     );
   };
 

@@ -201,7 +201,7 @@ interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
-  onUpdate: (id: string, text: string, notes: string) => void;
+  onUpdate: (id: string, text: string) => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
   isFirst: boolean;
@@ -220,7 +220,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editedText, setEditedText] = useState(todo.title);
-  const [editedNotes, setEditedNotes] = useState(todo.notes || "");
   const { t } = useTranslation();
 
   const cardVariants = {
@@ -239,18 +238,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   };
 
   const handleSave = () => {
-    if (
-      editedText.trim() &&
-      (editedText !== todo.title || editedNotes !== todo.notes)
-    ) {
-      onUpdate(todo.id, editedText.trim(), editedNotes);
+    if (editedText.trim() && editedText !== todo.title) {
+      onUpdate(todo.id, editedText.trim());
     }
     setIsPopupOpen(false);
   };
 
   const handleCancel = () => {
     setEditedText(todo.title);
-    setEditedNotes(todo.notes || "");
     setIsPopupOpen(false);
   };
 
@@ -304,11 +299,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
                 value={editedText}
                 onChange={(e) => setEditedText(e.target.value)}
                 placeholder={t("todo.addNew")}
-              />
-              <TextArea
-                value={editedNotes}
-                onChange={(e) => setEditedNotes(e.target.value)}
-                placeholder={t("todo.notes")}
+                data-testid="edit-todo-title"
               />
               <PopupButtons>
                 <PopupButton onClick={handleCancel}>

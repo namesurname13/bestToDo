@@ -3,7 +3,6 @@ export interface Todo {
   title: string;
   completed: boolean;
   createdAt: number;
-  notes?: string;
 }
 
 export interface TodoState {
