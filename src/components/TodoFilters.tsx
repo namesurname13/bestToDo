@@ -1,35 +1,36 @@
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 
-const FilterPanel = styled.div`
+const FilterContainer = styled.div`
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled.button<{ isActive?: boolean }>`
-  background: ${(props) => (props.isActive ? "#4a90e2" : "#fff")};
-  color: ${(props) => (props.isActive ? "#fff" : "#333")};
-  border: 2px solid #4a90e2;
-  padding: 0.4rem 0.8rem;
+const FilterButton = styled.button<{ active: boolean }>`
+  padding: 0.5rem 1rem;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
+  background-color: ${(props) => (props.active ? "#4caf50" : "#f0f0f0")};
+  color: ${(props) => (props.active ? "white" : "#333")};
 
   &:hover {
-    background: ${(props) => (props.isActive ? "#357abd" : "#f0f0f0")};
+    background-color: ${(props) => (props.active ? "#45a049" : "#e0e0e0")};
   }
 `;
 
-const ClearButton = styled(FilterButton)`
-  background: #fff;
-  color: #dc3545;
-  border-color: #dc3545;
+const ClearButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f44336;
+  color: white;
 
   &:hover {
-    background: #dc3545;
-    color: #fff;
+    background-color: #da190b;
   }
 `;
 
@@ -44,27 +45,31 @@ export const TodoFilters: React.FC<TodoFiltersProps> = ({
   onFilterChange,
   onClearCompleted,
 }) => {
+  const { t } = useTranslation();
+
   return (
-    <FilterPanel>
+    <FilterContainer>
       <FilterButton
-        isActive={filter === "all"}
+        active={filter === "all"}
         onClick={() => onFilterChange("all")}
       >
-        Все
+        {t("todo.filters.all")}
       </FilterButton>
       <FilterButton
-        isActive={filter === "active"}
+        active={filter === "active"}
         onClick={() => onFilterChange("active")}
       >
-        Активные
+        {t("todo.filters.active")}
       </FilterButton>
       <FilterButton
-        isActive={filter === "completed"}
+        active={filter === "completed"}
         onClick={() => onFilterChange("completed")}
       >
-        Завершенные
+        {t("todo.filters.completed")}
       </FilterButton>
-      <ClearButton onClick={onClearCompleted}>Очистить завершенные</ClearButton>
-    </FilterPanel>
+      <ClearButton onClick={onClearCompleted}>
+        {t("todo.clearCompleted")}
+      </ClearButton>
+    </FilterContainer>
   );
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { Todo } from "../types/todo";
 
 const TodoCard = styled(motion.div)`
@@ -201,10 +202,10 @@ interface TodoItemProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, text: string, notes: string) => void;
-  onMoveUp?: () => void;
-  onMoveDown?: () => void;
-  isFirst?: boolean;
-  isLast?: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
 export const TodoItem: React.FC<TodoItemProps> = ({
@@ -220,6 +221,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editedText, setEditedText] = useState(todo.title);
   const [editedNotes, setEditedNotes] = useState(todo.notes || "");
+  const { t } = useTranslation();
 
   const cardVariants = {
     initial: { opacity: 0, y: 20 },
@@ -297,20 +299,24 @@ export const TodoItem: React.FC<TodoItemProps> = ({
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <PopupTitle>Редактировать задачу</PopupTitle>
+              <PopupTitle>{t("todo.editTask")}</PopupTitle>
               <TextArea
                 value={editedText}
                 onChange={(e) => setEditedText(e.target.value)}
-                placeholder="Введите текст задачи..."
+                placeholder={t("todo.addNew")}
               />
               <TextArea
                 value={editedNotes}
                 onChange={(e) => setEditedNotes(e.target.value)}
-                placeholder="Введите заметки..."
+                placeholder={t("todo.notes")}
               />
               <PopupButtons>
-                <PopupButton onClick={handleCancel}>Отмена</PopupButton>
-                <PopupButton onClick={handleSave}>Сохранить</PopupButton>
+                <PopupButton onClick={handleCancel}>
+                  {t("common.cancel")}
+                </PopupButton>
+                <PopupButton onClick={handleSave}>
+                  {t("common.save")}
+                </PopupButton>
               </PopupButtons>
             </PopupContent>
           </PopupOverlay>

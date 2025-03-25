@@ -1,45 +1,33 @@
 import { useState } from "react";
 import styled from "@emotion/styled";
+import { useTranslation } from "react-i18next";
 import { Todo } from "../types/todo";
 
 const Form = styled.form`
   display: flex;
-  gap: 0.8rem;
-  margin-bottom: 0.5rem;
-  flex-wrap: wrap;
-
-  @media (min-width: 600px) {
-    flex-wrap: nowrap;
-  }
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 0.6rem;
-  font-size: 0.95rem;
-  border: 2px solid #ddd;
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
   border-radius: 4px;
-  margin-bottom: 0.5rem;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: #4a90e2;
-  }
+  font-size: 1rem;
 `;
 
-const AddButton = styled.button`
-  background: #4a90e2;
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
   color: white;
   border: none;
-  padding: 0.6rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.95rem;
-  width: 100%;
+  font-size: 1rem;
 
   &:hover {
-    background: #357abd;
+    background-color: #45a049;
   }
 `;
 
@@ -48,32 +36,31 @@ interface TodoFormProps {
 }
 
 export const TodoForm: React.FC<TodoFormProps> = ({ onSubmit }) => {
-  const [newTodo, setNewTodo] = useState("");
+  const [text, setText] = useState("");
+  const { t } = useTranslation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTodo.trim()) return;
-
-    const todo: Todo = {
-      id: Date.now().toString(),
-      title: newTodo.trim(),
-      completed: false,
-      createdAt: Date.now(),
-    };
-
-    onSubmit(todo);
-    setNewTodo("");
+    if (text.trim()) {
+      onSubmit({
+        id: Date.now().toString(),
+        title: text.trim(),
+        completed: false,
+        createdAt: Date.now(),
+      });
+      setText("");
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
       <Input
         type="text"
-        value={newTodo}
-        onChange={(e) => setNewTodo(e.target.value)}
-        placeholder="Добавить новую задачу..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder={t("todo.addNew")}
       />
-      <AddButton type="submit">Добавить</AddButton>
+      <Button type="submit">{t("common.add")}</Button>
     </Form>
   );
 };

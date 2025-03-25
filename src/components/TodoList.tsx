@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import { Global } from "@emotion/react";
 import { AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { TodoItem } from "./TodoItem";
 import { TodoForm } from "./TodoForm";
 import { TodoFilters } from "./TodoFilters";
@@ -82,6 +83,12 @@ const TodoListContainer = styled.div`
   width: 100%;
 `;
 
+const EmptyMessage = styled.div`
+  text-align: center;
+  padding: 1rem;
+  color: #888;
+`;
+
 /**
  * Основной компонент списка задач.
  * Управляет состоянием задач, их фильтрацией и взаимодействием с localStorage.
@@ -89,20 +96,14 @@ const TodoListContainer = styled.div`
  * @component
  */
 export const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const panelRef = useRef<HTMLDivElement>(null);
   const [containerPadding, setContainerPadding] = useState(0);
-
-  /**
-   * Загружает задачи из localStorage при монтировании компонента
-   */
-  useEffect(() => {
-    const savedTodos = localStorage.getItem("todos");
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    }
-  }, []);
+  const { t } = useTranslation();
 
   /**
    * Сохраняет задачи в localStorage при их изменении
@@ -206,19 +207,23 @@ export const TodoList: React.FC = () => {
         <ScrollContainer>
           <TodoListContainer data-testid="todo-list">
             <AnimatePresence mode="popLayout">
-              {filteredTodos.map((todo, index) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={handleToggleTodo}
-                  onDelete={handleDeleteTodo}
-                  onUpdate={handleUpdateTodo}
-                  onMoveUp={() => handleMoveTodo(index, index - 1)}
-                  onMoveDown={() => handleMoveTodo(index, index + 1)}
-                  isFirst={index === 0}
-                  isLast={index === filteredTodos.length - 1}
-                />
-              ))}
+              {filteredTodos.length === 0 ? (
+                <EmptyMessage>{t("todo.noTasks")}</EmptyMessage>
+              ) : (
+                filteredTodos.map((todo, index) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={handleToggleTodo}
+                    onDelete={handleDeleteTodo}
+                    onUpdate={handleUpdateTodo}
+                    onMoveUp={() => handleMoveTodo(index, index - 1)}
+                    onMoveDown={() => handleMoveTodo(index, index + 1)}
+                    isFirst={index === 0}
+                    isLast={index === filteredTodos.length - 1}
+                  />
+                ))
+              )}
             </AnimatePresence>
           </TodoListContainer>
         </ScrollContainer>

@@ -1,0 +1,22 @@
+{
+  "common": {
+    "add": "Add",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "moveUp": "Up",
+    "moveDown": "Down"
+  },
+  "todo": {
+    "addNew": "Add new task...",
+    "editTask": "Edit task",
+    "noTasks": "No tasks",
+    "clearCompleted": "Clear completed",
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "completed": "Completed"
+    }
+  }
+} 
